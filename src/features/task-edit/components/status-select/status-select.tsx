@@ -1,12 +1,13 @@
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import InputBase from '@mui/material/InputBase'
 import MenuItem from '@mui/material/MenuItem'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import { styled } from '@mui/material/styles'
 import { useState } from 'react'
-import { Status } from '../../../../types'
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import { StatusSelectProps, statusItems } from './status-select.types'
+import useAllowedStatuses from '../../../../hooks/useAllowedStatuses'
 import { theme } from '../../../../theme'
+import { Status } from '../../../../types'
+import { StatusSelectProps } from './status-select.types'
 
 const MenuProps = {
   PaperProps: {
@@ -37,6 +38,8 @@ export const StatusSelect = ({
   currentStatus = Status.TODO,
   onChange,
 }: StatusSelectProps) => {
+  const allowedStatuses = useAllowedStatuses(currentStatus)
+
   const [status, setStatus] = useState<Status>(currentStatus)
   const handleChange = (event: SelectChangeEvent<Status>) => {
     const {
@@ -55,7 +58,7 @@ export const StatusSelect = ({
       IconComponent={KeyboardArrowDownIcon}
       MenuProps={MenuProps}
     >
-      {statusItems.map((statusItem: Status) => (
+      {allowedStatuses.map((statusItem: Status) => (
         <MenuItem key={statusItem} value={statusItem} sx={{ padding: '16px' }}>
           {statusItem}
         </MenuItem>
