@@ -1,8 +1,7 @@
 import { Container, ThemeProvider } from '@mui/material'
-import { Home } from './features'
+import { Home, TaskEdit } from './features'
 import { theme } from './theme'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import { TaskEdit } from './features/task-edit'
 
 const router = createBrowserRouter([
   {
