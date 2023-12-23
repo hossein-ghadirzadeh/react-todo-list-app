@@ -1,24 +1,20 @@
 import { Container, ThemeProvider } from '@mui/material'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { Breadcrumb } from './components/breadcrumb'
 import { Home, TaskEdit } from './features'
 import { theme } from './theme'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <Home />,
-  },
-  {
-    path: 'task/:taskId/edit',
-    element: <TaskEdit />,
-  },
-])
 
 export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <Container maxWidth="sm">
-        <RouterProvider router={router} />
+        <BrowserRouter>
+          <Breadcrumb />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/task/:taskId/edit" element={<TaskEdit />} />
+          </Routes>
+        </BrowserRouter>
       </Container>
     </ThemeProvider>
   )
