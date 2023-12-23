@@ -1,8 +1,9 @@
+import DoneIcon from '@mui/icons-material/Done'
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
 import { Box, Button, Stack, Typography, useTheme } from '@mui/material'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { TextField } from '../../components/text-field'
-import DoneIcon from '@mui/icons-material/Done'
 import { Status } from '../../types'
 import { StatusSelect } from './components/status-select'
 
@@ -10,6 +11,7 @@ export const TaskEdit = () => {
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const theme = useTheme()
+  const navigate = useNavigate()
 
   return (
     <Box
@@ -75,6 +77,7 @@ export const TaskEdit = () => {
                 textTransform: 'none',
                 padding: '10px 20px',
               }}
+              onClick={() => navigate('/')}
             >
               Cancel
             </Button>
