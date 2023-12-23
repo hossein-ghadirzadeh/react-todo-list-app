@@ -1,4 +1,4 @@
-import { ThemeProvider } from '@mui/material'
+import { Container, ThemeProvider } from '@mui/material'
 import { Home } from './features'
 import { theme } from './theme'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
@@ -18,7 +18,9 @@ const router = createBrowserRouter([
 export default function App() {
   return (
     <ThemeProvider theme={theme}>
-      <RouterProvider router={router} />
+      <Container maxWidth="sm">
+        <RouterProvider router={router} />
+      </Container>
     </ThemeProvider>
   )
 }
