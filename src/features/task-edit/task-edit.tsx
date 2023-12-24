@@ -6,6 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { FormButton } from '../../components/form-button'
 import { FormHeader } from '../../components/form-header'
 import { TextField } from '../../components/text-field'
+import { descriptionErrorMessage, titleErrorMessage } from '../../constants'
 import { useTask } from '../../context/task.context'
 import { Status, Task } from '../../types'
 import { StatusSelect } from './components/status-select'
@@ -19,16 +20,25 @@ export const TaskEdit = () => {
   const selectedTask =
     tasks.find((task: Task) => task.id === Number(taskId)) ?? initialTaskForEdit
   const [task, setTask] = useState<Task>(selectedTask)
-
-  const getIsFormValid = () => {
-    return task.title && task.description
-  }
+  const [titleError, setTitleError] = useState(false)
+  const [descriptionError, setDescriptionError] = useState(false)
 
   const handleEditTask = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    editTask(task)
-    navigate('/')
-    setTask(initialTaskForEdit)
+    if (task.title.trim() !== '' && task.description.trim() !== '') {
+      if (task.description.length > 100) {
+        editTask(task)
+        navigate('/')
+        setTask(initialTaskForEdit)
+        setTitleError(false)
+        setDescriptionError(false)
+      } else {
+        setDescriptionError(true)
+      }
+    } else {
+      setTitleError(task.title.trim() === '')
+      setDescriptionError(task.description.trim() === '')
+    }
   }
 
   const handleChange = (key: keyof Task, value: string) => {
@@ -59,14 +69,24 @@ export const TaskEdit = () => {
           <TextField
             label="Title"
             value={task.title}
-            onChange={e => handleChange('title', e.target.value)}
+            onChange={e => {
+              handleChange('title', e.target.value)
+              setTitleError(false)
+            }}
+            error={titleError}
+            helperText={titleError && titleErrorMessage}
           />
           <TextField
             label="Description"
             value={task.description}
-            onChange={e => handleChange('description', e.target.value)}
+            onChange={e => {
+              handleChange('description', e.target.value)
+              setDescriptionError(false)
+            }}
             multiline
             rows={16}
+            error={descriptionError}
+            helperText={descriptionError && descriptionErrorMessage}
           />
           <StatusSelect
             currentStatus={selectedTask.status}
@@ -82,7 +102,6 @@ export const TaskEdit = () => {
               fullWidth
               variant="contained"
               color="primary"
-              disabled={!getIsFormValid()}
             />
             <FormButton
               title="Cancel"

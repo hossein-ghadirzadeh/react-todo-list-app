@@ -5,25 +5,35 @@ import { FormEvent, useState } from 'react'
 import { FormButton } from '../../../../components/form-button'
 import { FormHeader } from '../../../../components/form-header'
 import { TextField } from '../../../../components/text-field'
+import {
+  descriptionErrorMessage,
+  titleErrorMessage,
+} from '../../../../constants'
 import { useTask } from '../../../../context/task.context'
 
 export const TaskAdd = () => {
   const theme = useTheme()
-
   const { addTask } = useTask()
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
-
-  const getIsFormValid = () => {
-    return title && description
-  }
+  const [titleError, setTitleError] = useState(false)
+  const [descriptionError, setDescriptionError] = useState(false)
 
   const handleAddTask = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    if (title && description) {
-      addTask(title, description)
-      setTitle('')
-      setDescription('')
+    if (title.trim() !== '' && description.trim() !== '') {
+      if (description.length > 100) {
+        addTask(title, description)
+        setTitle('')
+        setDescription('')
+        setTitleError(false)
+        setDescriptionError(false)
+      } else {
+        setDescriptionError(true)
+      }
+    } else {
+      setTitleError(title.trim() === '')
+      setDescriptionError(description.trim() === '')
     }
   }
 
@@ -51,14 +61,24 @@ export const TaskAdd = () => {
           <TextField
             label="Title"
             value={title}
-            onChange={e => setTitle(e.target.value)}
+            onChange={e => {
+              setTitle(e.target.value)
+              setTitleError(false)
+            }}
+            error={titleError}
+            helperText={titleError && titleErrorMessage}
           />
           <TextField
             label="Description"
             value={description}
-            onChange={e => setDescription(e.target.value)}
+            onChange={e => {
+              setDescription(e.target.value)
+              setDescriptionError(false)
+            }}
             multiline
             rows={8}
+            error={descriptionError}
+            helperText={descriptionError && descriptionErrorMessage}
           />
           <FormButton
             type="submit"
@@ -66,7 +86,6 @@ export const TaskAdd = () => {
             color="primary"
             icon={<AddRoundedIcon sx={{ fontSize: '20px' }} />}
             title="Add"
-            disabled={!getIsFormValid()}
           />
         </Stack>
       </form>
