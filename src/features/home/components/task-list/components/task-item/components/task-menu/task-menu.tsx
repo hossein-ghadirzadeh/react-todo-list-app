@@ -10,12 +10,14 @@ import { Menu } from '../../../../../../../../components/menu'
 import { Modal } from '../../../../../../../../components/modal'
 import { TaskMenuProps } from './task-menu.types'
 import { TaskHistory } from '../task-history'
+import { TaskDelete } from '../task-delete'
 
 export const TaskMenu = ({ taskId }: TaskMenuProps) => {
   const theme = useTheme()
   const navigate = useNavigate()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [openHistoryModal, setOpenHistoryModal] = useState<boolean>(false)
+  const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false)
   const open = Boolean(anchorEl)
 
   const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -62,7 +64,10 @@ export const TaskMenu = ({ taskId }: TaskMenuProps) => {
             Edit Task
           </MenuItem>
           <MenuItem
-            onClick={() => console.log('Delete Task with ID = ', taskId)}
+            onClick={() => {
+              setOpenDeleteModal(true)
+              setAnchorEl(null)
+            }}
             disableRipple
             sx={{ color: theme.palette.error.dark }}
           >
@@ -74,8 +79,18 @@ export const TaskMenu = ({ taskId }: TaskMenuProps) => {
       <Modal
         open={openHistoryModal}
         handleClose={() => setOpenHistoryModal(false)}
+        minHeight="600px"
       >
         <TaskHistory taskId={taskId} />
+      </Modal>
+      <Modal
+        open={openDeleteModal}
+        handleClose={() => setOpenDeleteModal(false)}
+      >
+        <TaskDelete
+          taskId={taskId}
+          handleClose={() => setOpenDeleteModal(false)}
+        />
       </Modal>
     </>
   )
