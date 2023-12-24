@@ -8,17 +8,20 @@ import {
   Typography,
   useTheme,
 } from '@mui/material'
-import { useState } from 'react'
-import { TaskAddProps } from './task-add.types'
+import { FormEvent, useState } from 'react'
+import { useTask } from '../../../../context/task.context'
 
-export const TaskAdd = ({ onAddTask }: TaskAddProps) => {
+export const TaskAdd = () => {
+  const { addTask } = useTask()
+
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
   const theme = useTheme()
 
-  const handleAddTask = () => {
+  const handleAddTask = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
     if (title && description) {
-      onAddTask(title, description)
+      addTask(title, description)
       setTitle('')
       setDescription('')
     }
@@ -43,7 +46,7 @@ export const TaskAdd = ({ onAddTask }: TaskAddProps) => {
         </Typography>
       </Stack>
 
-      <form>
+      <form onSubmit={handleAddTask}>
         <Stack direction="column" gap={2} alignItems="flex-end">
           <TextField
             fullWidth
@@ -76,6 +79,7 @@ export const TaskAdd = ({ onAddTask }: TaskAddProps) => {
             onChange={e => setDescription(e.target.value)}
           />
           <Button
+            type="submit"
             variant="contained"
             color="primary"
             sx={{
@@ -84,7 +88,6 @@ export const TaskAdd = ({ onAddTask }: TaskAddProps) => {
               padding: '10px 20px',
               marginTop: '8px',
             }}
-            onClick={handleAddTask}
           >
             <Stack direction="row" alignItems="center" gap={1}>
               <AddRoundedIcon sx={{ fontSize: '20px' }} />
