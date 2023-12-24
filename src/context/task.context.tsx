@@ -5,11 +5,13 @@ import { formatTimestamp } from '../utils/date/formatTimestamp'
 interface TaskContextState {
   tasks: Task[]
   addTask: (title: string, description: string) => void
+  editTask: (updatedTask: Task) => void
 }
 
 const TaskContext = createContext<TaskContextState>({
   tasks: [],
   addTask: () => {},
+  editTask: () => {},
 })
 
 interface TaskProviderProps {
@@ -31,8 +33,15 @@ export const TaskProvider = ({ children }: TaskProviderProps) => {
     setTasks([...tasks, newTask])
   }
 
+  const editTask = (updatedTask: Task) => {
+    const updatedTasks = tasks.map(task =>
+      task.id === updatedTask.id ? { ...task, ...updatedTask } : task,
+    )
+    setTasks(updatedTasks)
+  }
+
   return (
-    <TaskContext.Provider value={{ tasks, addTask }}>
+    <TaskContext.Provider value={{ tasks, addTask, editTask }}>
       {children}
     </TaskContext.Provider>
   )

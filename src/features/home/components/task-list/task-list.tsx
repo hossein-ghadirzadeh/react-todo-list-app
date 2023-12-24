@@ -7,8 +7,6 @@ import { TaskItem } from './components/task-item'
 export const TaskList = () => {
   const { tasks } = useTask()
 
-  console.log(tasks)
-
   return (
     <Stack gap={1}>
       <Typography variant="h6" fontWeight="bold" fontSize="18px">

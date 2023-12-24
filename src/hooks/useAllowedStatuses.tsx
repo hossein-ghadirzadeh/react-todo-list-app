@@ -11,6 +11,7 @@ const statusTransitions: StatusRules = {
   [Status.IN_QA]: [Status.IN_QA, Status.TODO, Status.DONE],
   [Status.BLOCKED]: [Status.BLOCKED, Status.TODO],
   [Status.DONE]: [Status.DONE, Status.DEPLOYED],
+  [Status.DEPLOYED]: [Status.DEPLOYED],
 }
 
 const useAllowedStatuses = (currentStatus: Status) => {

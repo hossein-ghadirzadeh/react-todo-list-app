@@ -1,17 +1,38 @@
 import DoneIcon from '@mui/icons-material/Done'
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
 import { Box, Button, Stack, Typography, useTheme } from '@mui/material'
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { FormEvent, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { TextField } from '../../components/text-field'
-import { Status } from '../../types'
+import { Status, Task } from '../../types'
 import { StatusSelect } from './components/status-select'
+import { useTask } from '../../context/task.context'
+
+const initialTask: Task = {
+  id: 0,
+  title: '',
+  description: '',
+  status: Status.TODO,
+}
 
 export const TaskEdit = () => {
-  const [title, setTitle] = useState('')
-  const [description, setDescription] = useState('')
   const theme = useTheme()
   const navigate = useNavigate()
+  const { taskId } = useParams()
+  const { tasks, editTask } = useTask()
+  const selectedTask =
+    tasks.find((task: Task) => task.id === Number(taskId)) ?? initialTask
+  const [task, setTask] = useState<Task>(selectedTask)
+
+  const handleEditTask = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    editTask(task)
+    navigate('/')
+  }
+
+  const handleChange = (key: keyof Task, value: string) => {
+    setTask(prevTask => ({ ...prevTask, [key]: value }))
+  }
 
   return (
     <Box
@@ -32,28 +53,29 @@ export const TaskEdit = () => {
         </Typography>
       </Stack>
 
-      <form>
+      <form onSubmit={handleEditTask}>
         <Stack direction="column" gap={2} alignItems="flex-end">
           <TextField
             label="Title"
-            value={title}
-            onChange={e => setTitle(e.target.value)}
+            value={task.title}
+            onChange={e => handleChange('title', e.target.value)}
           />
           <TextField
             label="Description"
-            value={description}
-            onChange={e => setDescription(e.target.value)}
+            value={task.description}
+            onChange={e => handleChange('description', e.target.value)}
             multiline
             rows={16}
           />
           <StatusSelect
-            currentStatus={Status.TODO}
+            currentStatus={selectedTask.status}
             onChange={(status: Status) => {
-              console.log('status:', status)
+              handleChange('status', status)
             }}
           />
           <Stack direction="row" width="100%" gap={2}>
             <Button
+              type="submit"
               fullWidth
               variant="contained"
               color="primary"
