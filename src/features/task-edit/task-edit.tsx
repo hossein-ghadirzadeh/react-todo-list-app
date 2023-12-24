@@ -1,19 +1,15 @@
 import DoneIcon from '@mui/icons-material/Done'
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
-import { Box, Button, Stack, Typography, useTheme } from '@mui/material'
+import { Box, Stack, useTheme } from '@mui/material'
 import { FormEvent, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { FormButton } from '../../components/form-button'
+import { FormHeader } from '../../components/form-header'
 import { TextField } from '../../components/text-field'
+import { useTask } from '../../context/task.context'
 import { Status, Task } from '../../types'
 import { StatusSelect } from './components/status-select'
-import { useTask } from '../../context/task.context'
-
-const initialTask: Task = {
-  id: 0,
-  title: '',
-  description: '',
-  status: Status.TODO,
-}
+import { initialTaskForEdit } from './task-edit.types'
 
 export const TaskEdit = () => {
   const theme = useTheme()
@@ -21,13 +17,18 @@ export const TaskEdit = () => {
   const { taskId } = useParams()
   const { tasks, editTask } = useTask()
   const selectedTask =
-    tasks.find((task: Task) => task.id === Number(taskId)) ?? initialTask
+    tasks.find((task: Task) => task.id === Number(taskId)) ?? initialTaskForEdit
   const [task, setTask] = useState<Task>(selectedTask)
+
+  const getIsFormValid = () => {
+    return task.title && task.description
+  }
 
   const handleEditTask = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     editTask(task)
     navigate('/')
+    setTask(initialTaskForEdit)
   }
 
   const handleChange = (key: keyof Task, value: string) => {
@@ -37,24 +38,24 @@ export const TaskEdit = () => {
   return (
     <Box
       mt={4}
+      padding="24px 32px"
+      borderRadius="16px"
+      boxShadow="0px 8px 48px -12px rgba(16, 24, 40, 0.15)"
       sx={{
         background: theme.palette.common.white,
-        padding: '24px 32px',
-        borderRadius: '16px',
-        boxShadow: '0px 8px 48px -12px rgba(16, 24, 40, 0.15)',
       }}
     >
-      <Stack direction="row" alignItems="center" gap={1} mb={2}>
-        <EditOutlinedIcon
-          sx={{ color: theme.palette.grey[400], fontSize: '16px' }}
-        />
-        <Typography variant="h6" fontWeight="bold" fontSize="18px">
-          Edit Task
-        </Typography>
-      </Stack>
+      <FormHeader
+        icon={
+          <EditOutlinedIcon
+            sx={{ color: theme.palette.grey[400], fontSize: '16px' }}
+          />
+        }
+        title="Edit Task"
+      />
 
       <form onSubmit={handleEditTask}>
-        <Stack direction="column" gap={2} alignItems="flex-end">
+        <Stack direction="column" gap={2}>
           <TextField
             label="Title"
             value={task.title}
@@ -74,35 +75,22 @@ export const TaskEdit = () => {
             }}
           />
           <Stack direction="row" width="100%" gap={2}>
-            <Button
+            <FormButton
+              title="Save Changes"
+              icon={<DoneIcon sx={{ fontSize: '20px' }} />}
               type="submit"
               fullWidth
               variant="contained"
               color="primary"
-              sx={{
-                borderRadius: '32px',
-                textTransform: 'none',
-                padding: '10px 20px',
-              }}
-            >
-              <Stack direction="row" alignItems="center" gap={1}>
-                <DoneIcon sx={{ fontSize: '20px' }} />
-                Save Changes
-              </Stack>
-            </Button>
-            <Button
+              disabled={!getIsFormValid()}
+            />
+            <FormButton
+              title="Cancel"
               fullWidth
               variant="outlined"
               color="primary"
-              sx={{
-                borderRadius: '32px',
-                textTransform: 'none',
-                padding: '10px 20px',
-              }}
               onClick={() => navigate('/')}
-            >
-              Cancel
-            </Button>
+            />
           </Stack>
         </Stack>
       </form>

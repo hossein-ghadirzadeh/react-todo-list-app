@@ -1,10 +1,11 @@
-import { Box, Button, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import { Stack } from '@mui/system'
-import { TaskDeleteProps } from './task-delete.types'
-import { TrashIcon } from './task-delete.icons'
-import { Text } from './task-delete.constants'
+import { FormButton } from '../../../../../../../../components/form-button'
 import { useTask } from '../../../../../../../../context/task.context'
+import { Text } from './task-delete.constants'
+import { TrashIcon } from './task-delete.icons'
+import { TaskDeleteProps } from './task-delete.types'
 
 export const TaskDelete = ({ taskId, handleClose }: TaskDeleteProps) => {
   const theme = useTheme()
@@ -38,33 +39,20 @@ export const TaskDelete = ({ taskId, handleClose }: TaskDeleteProps) => {
         </Typography>
       </Box>
       <Stack direction="row" width="100%" gap={2}>
-        <Button
+        <FormButton
           fullWidth
           variant="outlined"
           color="primary"
-          sx={{
-            borderRadius: '32px',
-            textTransform: 'none',
-            padding: '10px 20px',
-          }}
+          title="Cancel"
           onClick={handleClose}
-        >
-          Cancel
-        </Button>
-        <Button
-          type="submit"
+        />
+        <FormButton
           fullWidth
           variant="contained"
-          sx={{
-            borderRadius: '32px',
-            textTransform: 'none',
-            padding: '10px 20px',
-            background: theme.palette.error.dark,
-          }}
+          title="Delete"
           onClick={handleDeleteTask}
-        >
-          Delete
-        </Button>
+          background={theme.palette.error.dark}
+        />
       </Stack>
     </Stack>
   )
