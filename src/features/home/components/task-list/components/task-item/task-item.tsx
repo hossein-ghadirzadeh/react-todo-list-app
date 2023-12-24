@@ -1,13 +1,9 @@
 import AccessTimeIcon from '@mui/icons-material/AccessTime'
 import { Box, Stack, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
-import { Task } from '../../../../../../types'
 import { StatusChip } from './components/status-badge'
 import { TaskMenu } from './components/task-menu'
-
-interface TaskItemProps {
-  task: Task
-}
+import { TaskItemProps } from './task-item.types'
 
 export const TaskItem = ({ task }: TaskItemProps) => {
   const theme = useTheme()
@@ -52,6 +48,7 @@ export const TaskItem = ({ task }: TaskItemProps) => {
           variant="body1"
           fontSize="14px"
           color={theme.palette.grey[600]}
+          sx={{ wordWrap: 'break-word' }}
           mt={1}
         >
           {task.description}
