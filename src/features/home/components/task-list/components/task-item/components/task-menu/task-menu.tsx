@@ -79,7 +79,7 @@ export const TaskMenu = ({ taskId }: TaskMenuProps) => {
       <Modal
         open={openHistoryModal}
         handleClose={() => setOpenHistoryModal(false)}
-        minHeight="600px"
+        height="600px"
       >
         <TaskHistory taskId={taskId} />
       </Modal>

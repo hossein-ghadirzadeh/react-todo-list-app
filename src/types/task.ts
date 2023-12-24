@@ -14,3 +14,7 @@ export type Task = {
   status: Status
   createdAt?: string
 }
+
+export type TasksHistoryUpdatedFields = Partial<Task> & {
+  updatedAt: string
+}
