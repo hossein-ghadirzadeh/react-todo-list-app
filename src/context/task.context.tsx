@@ -1,8 +1,9 @@
-import { ReactNode, createContext, useContext, useState } from 'react'
+import { ReactNode, createContext, useContext } from 'react'
+import useLocalStorage from '../hooks/useLocalStorage'
 import { Status, Task, TasksHistoryUpdatedFields } from '../types'
 import { formatTimestamp } from '../utils/date'
-import { generateNextId } from '../utils/task'
 import { getChangedProperties } from '../utils/object'
+import { generateNextId } from '../utils/task'
 
 interface TaskContextState {
   tasks: Task[]
@@ -25,10 +26,10 @@ interface TaskProviderProps {
 }
 
 export const TaskProvider = ({ children }: TaskProviderProps) => {
-  const [tasks, setTasks] = useState<Array<Task>>([])
-  const [tasksHistory, setTasksHistory] = useState<
+  const [tasks, setTasks] = useLocalStorage<Array<Task>>('tasks', [])
+  const [tasksHistory, setTasksHistory] = useLocalStorage<
     Record<number, Array<TasksHistoryUpdatedFields>>
-  >({})
+  >('tasksHistory', {})
 
   const addTask = (title: string, description: string) => {
     const newTask: Task = {
