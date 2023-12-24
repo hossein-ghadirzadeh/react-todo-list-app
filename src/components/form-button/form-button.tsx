@@ -11,7 +11,7 @@ export const FormButton = (props: FormButtonProps) => {
       sx={{
         borderRadius: '32px',
         textTransform: 'none',
-        padding: '10px 20px',
+        padding: { lg: '10px 20px' },
         background,
       }}
     >

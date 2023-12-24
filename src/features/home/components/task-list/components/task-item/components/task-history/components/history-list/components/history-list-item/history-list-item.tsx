@@ -24,18 +24,18 @@ export const HistoryListItem = ({ title, updatedAt }: HistoryListItemProps) => {
       <ListItemText
         primary={title}
         secondary={
-          <Stack direction="row" gap={0.5} alignItems="center">
-            <AccessTimeIcon
-              sx={{ color: theme.palette.grey[400], fontSize: '16px' }}
-            />
-            <Typography
-              variant="subtitle1"
-              fontSize="12px"
-              color={theme.palette.grey[400]}
-            >
+          <Typography
+            variant="subtitle1"
+            fontSize="12px"
+            color={theme.palette.grey[400]}
+          >
+            <Stack direction="row" gap={0.5} alignItems="center">
+              <AccessTimeIcon
+                sx={{ color: theme.palette.grey[400], fontSize: '16px' }}
+              />
               {updatedAt}
-            </Typography>
-          </Stack>
+            </Stack>
+          </Typography>
         }
       />
     </MUIListItem>

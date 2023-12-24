@@ -4,7 +4,7 @@ import { TaskList } from './components/task-list'
 
 export const Home = () => {
   return (
-    <Stack direction="column" gap={3}>
+    <Stack direction="column" gap={3} mb={6}>
       <TaskAdd />
       <TaskList />
     </Stack>

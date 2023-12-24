@@ -35,7 +35,7 @@ const MuiInputBase = styled(InputBase)(({ theme }) => ({
 }))
 
 export const StatusSelect = ({
-  currentStatus = Status.TODO,
+  currentStatus,
   onChange,
 }: StatusSelectProps) => {
   const allowedStatuses = useAllowedStatuses(currentStatus)
