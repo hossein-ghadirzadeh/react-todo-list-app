@@ -45,5 +45,3 @@ export const Breadcrumb = () => {
     </Breadcrumbs>
   )
 }
-
-Breadcrumb
